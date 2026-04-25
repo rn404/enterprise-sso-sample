@@ -146,3 +146,8 @@ vite.config.ts.timestamp-*
 .obsidian/
 .trash/
 .obsidian.vimrc
+
+# SQLite database files (db/.gitkeep のみ追跡)
+db/*.sqlite
+db/*.sqlite-journal
+db/*.db

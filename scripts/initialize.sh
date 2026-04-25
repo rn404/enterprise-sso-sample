@@ -20,13 +20,11 @@ set -euo pipefail
 
 cd "$(dirname "$0")/.."
 
-# --- ディレクトリ構成 ---
 mkdir -p src/db db
 touch db/.gitkeep
 
-# --- .gitignore 追記 (SQLite ランタイムデータを除外) ---
 if ! grep -q '^db/\*\.sqlite$' .gitignore 2>/dev/null; then
-  cat >> .gitignore <<'EOF'
+  cat >>.gitignore <<'EOF'
 
 # SQLite database files (db/.gitkeep のみ追跡)
 db/*.sqlite
@@ -35,8 +33,7 @@ db/*.db
 EOF
 fi
 
-# --- tsconfig.json ---
-cat > tsconfig.json <<'EOF'
+cat >tsconfig.json <<'EOF'
 {
   "compilerOptions": {
     "target": "ES2022",
@@ -56,8 +53,7 @@ cat > tsconfig.json <<'EOF'
 }
 EOF
 
-# --- src/db/schema.sql ---
-cat > src/db/schema.sql <<'EOF'
+cat >src/db/schema.sql <<'EOF'
 create table if not exists saml_settings (
   id text primary key,
   idp_entity_id text,
@@ -71,8 +67,7 @@ create table if not exists saml_settings (
 );
 EOF
 
-# --- src/db/migrate.ts ---
-cat > src/db/migrate.ts <<'EOF'
+cat >src/db/migrate.ts <<'EOF'
 import { readFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { DatabaseSync } from "node:sqlite";
@@ -93,7 +88,6 @@ try {
 }
 EOF
 
-# --- 依存インストール ---
 # SQLite は Node 標準の node:sqlite (DatabaseSync) を使うため追加依存なし。
 # 過去の実行で better-sqlite3 を導入していた場合は除去する。
 npm uninstall better-sqlite3 @types/better-sqlite3 2>/dev/null || true
@@ -110,7 +104,7 @@ npm install --save-dev \
   oxlint \
   oxfmt
 
-# --- package.json scripts ---
+# package.json scripts
 npm pkg set scripts.dev="tsx watch src/index.ts"
 npm pkg set scripts.start="tsx src/index.ts"
 npm pkg set scripts.autofix="oxfmt && oxlint --fix"
@@ -119,22 +113,12 @@ npm pkg set scripts.runtime-guard="echo 'no runtime checks yet' && exit 0"
 npm pkg set scripts.precommit="npm run autofix && npm run source-guard"
 npm pkg set scripts.db:migrate="tsx src/db/migrate.ts"
 
-# --- linter / formatter 初期設定 ---
-# 既存ファイルがある場合は上書きしない (ぬしさんのカスタマイズを保持)
 [ -f .oxfmtrc.json ] || npx oxfmt --init
 [ -f .oxlintrc.json ] || npx oxlint --init
 
-# --- SQLite migration ---
 npm run db:migrate
-
-# --- 初期状態のヘルスチェック ---
-# 脆弱性レポート (低レベル脆弱性で止めない)
 npm audit || true
-
-# フォーマット適用 + lint 自動修正
 npm run autofix
-
-# フォーマット検査 + lint + 型検査
 npm run source-guard
 
 echo "initialize.sh done"
