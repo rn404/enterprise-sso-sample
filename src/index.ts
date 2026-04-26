@@ -5,6 +5,7 @@ import { bodyLimit } from "hono/body-limit";
 import { config, samlUrls } from "./config";
 import { MetadataParseError, parseIdpMetadata } from "./saml/metadata-parser";
 import { getDefaultSamlSettings, upsertDefaultSamlSettings } from "./saml/settings-store";
+import { buildSpMetadataXml } from "./saml/sp-metadata";
 import { renderSamlSettingsPage } from "./views/saml-settings";
 
 const SAML_SETTINGS_BODY_LIMIT = 256 * 1024;
@@ -16,7 +17,10 @@ app.get("/login", (c) => c.text("TODO: login screen"));
 
 app.get("/saml/login", (c) => c.text("TODO: build SAML Request and redirect"));
 app.post("/saml/acs", (c) => c.text("TODO: receive SAML Response"));
-app.get("/saml/metadata", (c) => c.text("TODO: SP metadata XML"));
+app.get("/saml/metadata", (c) => {
+  c.header("Content-Type", "application/samlmetadata+xml; charset=utf-8");
+  return c.body(buildSpMetadataXml());
+});
 
 app.get("/me", (c) => c.text("TODO: operator profile"));
 
