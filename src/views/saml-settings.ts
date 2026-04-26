@@ -91,7 +91,8 @@ export function renderSamlSettingsPage(
         ${bootstrapMode
           ? html`<div class="note">
               <strong>BOOTSTRAP_MODE=true</strong>: 初期セットアップモード中。設定保存後は
-              <code>BOOTSTRAP_MODE=false</code> に切り替えてください。
+              <code>BOOTSTRAP_MODE=false</code>
+              に切り替えて再起動、もしくは再デプロイを実行してください。
             </div>`
           : ""}
         ${flash ? html`<div class="flash ${flash.kind}">${flash.message}</div>` : ""}
