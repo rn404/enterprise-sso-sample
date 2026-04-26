@@ -23,13 +23,18 @@ cd "$(dirname "$0")/.."
 mkdir -p src/db db
 touch db/.gitkeep
 
-if ! grep -q '^db/\*\.sqlite$' .gitignore 2>/dev/null; then
+if ! grep -q '^db/\*$' .gitignore 2>/dev/null; then
   cat >>.gitignore <<'EOF'
 
-# SQLite database files (db/.gitkeep のみ追跡)
-db/*.sqlite
-db/*.sqlite-journal
-db/*.db
+# DB runtime files (.gitkeep のみ追跡)
+db/*
+!db/.gitkeep
+
+# macOS
+.DS_Store
+
+# Claude Code local settings
+.claude/settings.local.json
 EOF
 fi
 

@@ -147,7 +147,12 @@ vite.config.ts.timestamp-*
 .trash/
 .obsidian.vimrc
 
-# SQLite database files (db/.gitkeep のみ追跡)
-db/*.sqlite
-db/*.sqlite-journal
-db/*.db
+# DB runtime files (.gitkeep のみ追跡)
+db/*
+!db/.gitkeep
+
+# macOS
+.DS_Store
+
+# Claude Code local settings
+.claude/settings.local.json
