@@ -4,6 +4,7 @@ import { bodyLimit } from "hono/body-limit";
 
 import { config, samlUrls } from "./config";
 import { MetadataParseError, parseIdpMetadata } from "./saml/metadata-parser";
+import { SamlConfigError, buildSamlClient } from "./saml/saml-client";
 import { getDefaultSamlSettings, upsertDefaultSamlSettings } from "./saml/settings-store";
 import { buildSpMetadataXml } from "./saml/sp-metadata";
 import { renderSamlSettingsPage } from "./views/saml-settings";
@@ -15,7 +16,23 @@ const app = new Hono();
 app.get("/", (c) => c.text("TODO: dashboard"));
 app.get("/login", (c) => c.text("TODO: login screen"));
 
-app.get("/saml/login", (c) => c.text("TODO: build SAML Request and redirect"));
+app.get("/saml/login", async (c) => {
+  const settings = getDefaultSamlSettings();
+  if (!settings) {
+    return c.text("SAML 設定が未登録です。/saml-settings から登録してください。", 400);
+  }
+  try {
+    const saml = buildSamlClient(settings);
+    const authorizeUrl = await saml.getAuthorizeUrlAsync("", undefined, {});
+    return c.redirect(authorizeUrl, 302);
+  } catch (e) {
+    if (e instanceof SamlConfigError) {
+      return c.text(`SAML 設定エラー: ${e.message}`, 400);
+    }
+    const message = e instanceof Error ? e.message : String(e);
+    return c.text(`SAML Request の生成に失敗: ${message}`, 500);
+  }
+});
 app.post("/saml/acs", (c) => c.text("TODO: receive SAML Response"));
 app.get("/saml/metadata", (c) => {
   c.header("Content-Type", "application/samlmetadata+xml; charset=utf-8");
