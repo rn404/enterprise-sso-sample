@@ -10,7 +10,7 @@ Enterprise 向けアプリケーションに求められる SSO 認証を学ぶ�
 ## Workflow
 
 1. リポジトリを fork もしくは clone し、自分専用の作業環境を用意する
-2. 学習開始ブランチ `scope1-saml-sso/start` から自分の作業ブランチを切る
+2. 学習開始タグ `scope1-saml-sso/start` から自分の作業ブランチを切る
 
    ```bash
    git fetch origin
@@ -37,24 +37,39 @@ npm run dev
 
 ## For Contributors
 
-学習素材としてこのリポジトリをメンテナンスする人向けの運用ガイド。
+* `main`: 学習素材の最新状態を保つ branch。**scope の解答実装は main に入れない**
+* `scopeN-<topic>/start`: 各 scope の学習開始地点を表す **不変な tag**
+* `scopeN-<topic>/sample`: 各 scope の解答例を表す **不変な tag**（残すかは scope ごとに判断）
 
-### ブランチ戦略
+### Naming rule for tags
 
-* `main`: 学習素材としての最新状態。README / Design.md / scripts などの更新はここに入れる
-* `scope1-saml-sso/start`: scope 1 (SAML SSO) の学習開始地点。学習者はこのブランチから作業ブランチを切る
-
-`scope1-saml-sso/start` は「scope 1 の学習を始めるのに必要十分な状態」を維持する。SAML SSO の実装は含めず、scaffold / 設計ドキュメント / 学習導線の更新のみを反映していく。
-
-### main の更新を `scope1-saml-sso/start` に反映する
-
-README や Design.md など、学習開始時点で参照すべき内容に変更が入った場合は、main のコミットを `scope1-saml-sso/start` に cherry-pick する。
-
-```bash
-git checkout scope1-saml-sso/start
-git cherry-pick <commit-hash>
-git push origin scope1-saml-sso/start
-git checkout main
+```
+scope<連番>-<topic>/start
+scope<連番>-<topic>/sample
 ```
 
-scope の解答そのものになる実装コミットは反映しないこと。
+例: `scope1-saml-sso/start`, `scope2-oidc-sso/sample`
+
+### Operation 1
+
+1. main で対象 scope の Design Doc / scaffold / 学習導線(README の Workflow など)を整備しコミットする
+2. main の HEAD で start タグを打つ
+
+   ```bash
+   git tag -a scopeN-<topic>/start -m "scope N (<topic>) 学習開始地点"
+   git push origin scopeN-<topic>/start
+   ```
+
+### Operation 2
+
+各scope に対する解答例として sample tag を残す場合、別ブランチで実装し、その先端にタグを打つ
+
+```bash
+git checkout -b dev/scopeN-<topic> scopeN-<topic>/start
+# sample 実装を進める
+git tag -a scopeN-<topic>/sample -m "scope N (<topic>) 解答例"
+git push origin scopeN-<topic>/sample
+```
+- 作業ブランチ自体は push しなくてよい(tag が履歴記録の本体)
+- 原則、main に merge はしない
+
