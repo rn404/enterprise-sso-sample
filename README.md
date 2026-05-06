@@ -10,15 +10,15 @@ Enterprise 向けアプリケーションに求められる SSO 認証を学ぶ�
 ## Workflow
 
 1. リポジトリを fork もしくは clone し、自分専用の作業環境を用意する
-2. 学習開始タグ `scope1-saml-sso/start` から自分の作業ブランチを切る
+2. 学習開始タグ `a1-saml-sso/start` から自分の作業ブランチを切る
 
    ```bash
    git fetch origin
-   git checkout -b my-work scope1-saml-sso/start
+   git checkout -b my-work a1-saml-sso/start
    ```
 
 3. `bash scripts/initialize.sh` を実行し、環境構築を行う
-4. `docs/Design.md` の内容を読んで理解し、実装を進める。不明点や疑問点などを質問し、新しい学びがあれば「調査レポートを書いて」もらう（`.claude/skills/capture-learning/` skill が起動して `docs/reports/` 以下にレポートが作成される）
+4. `docs/Curriculum.md` で全体像を把握し、対応する `docs/design-docs/<Item> <Topic>.md` を読んで実装を進める。不明点や疑問点などを質問し、新しい学びがあれば「調査レポートを書いて」もらう（`.claude/skills/capture-learning/` skill が起動して `docs/reports/` 以下にレポートが作成される）
 
 ## Notes
 
@@ -37,38 +37,50 @@ npm run dev
 
 ## For Contributors
 
-* `main`: 学習素材の最新状態を保つ branch。**scope の解答実装は main に入れない**
-* `scopeN-<topic>/start`: 各 scope の学習開始地点を表す **不変な tag**
-* `scopeN-<topic>/sample`: 各 scope の解答例を表す **不変な tag**（残すかは scope ごとに判断）
+* `main`: 学習素材の最新状態を保つ branch。**各 track item の解答実装は main に入れない**
+* `<item-id>-<topic>/start`: 各 track item の学習開始地点を表す **不変な tag**
+* `<item-id>-<topic>/sample`: 各 track item の解答例を表す **不変な tag**（残すかは item ごとに判断）
 
 ### Naming rule for tags
 
 ```
-scope<連番>-<topic>/start
-scope<連番>-<topic>/sample
+<item-id>-<topic>/start
+<item-id>-<topic>/sample
 ```
 
-例: `scope1-saml-sso/start`, `scope2-oidc-sso/sample`
+`<item-id>` は `docs/Curriculum.md` の track item ID を小文字化したもの（例: `a1`, `b2`, `c3`）。
+
+例: `a1-saml-sso/start`, `b1-cookie-session/sample`
+
+### Naming rule for design docs
+
+```
+docs/design-docs/<Item-ID> <Topic>.md
+```
+
+`<Item-ID>` は Curriculum.md の表記そのまま（例: `A1`, `B1`）、`<Topic>` は Curriculum.md の項目名と一致させる（Obsidian の note title として自然に見えるよう、半角スペース区切り）。
+
+例: `A1 Single-tenant SAML SSO.md`, `B1 Cookie-based application session.md`
 
 ### Operation 1
 
-1. main で対象 scope の Design Doc / scaffold / 学習導線(README の Workflow など)を整備しコミットする
+1. main で対象 track item の Design Doc / scaffold / 学習導線(README の Workflow など)を整備しコミットする
 2. main の HEAD で start タグを打つ
 
    ```bash
-   git tag -a scopeN-<topic>/start -m "scope N (<topic>) 学習開始地点"
-   git push origin scopeN-<topic>/start
+   git tag -a <item-id>-<topic>/start -m "Start of <Item-ID> — <Topic>"
+   git push origin <item-id>-<topic>/start
    ```
 
 ### Operation 2
 
-各scope に対する解答例として sample tag を残す場合、別ブランチで実装し、その先端にタグを打つ
+各 track item に対する解答例として sample tag を残す場合、別ブランチで実装し、その先端にタグを打つ
 
 ```bash
-git checkout -b dev/scopeN-<topic> scopeN-<topic>/start
+git checkout -b dev/<item-id>-<topic> <item-id>-<topic>/start
 # sample 実装を進める
-git tag -a scopeN-<topic>/sample -m "scope N (<topic>) 解答例"
-git push origin scopeN-<topic>/sample
+git tag -a <item-id>-<topic>/sample -m "Reference solution — <Item-ID> <Topic>"
+git push origin <item-id>-<topic>/sample
 ```
 - 作業ブランチ自体は push しなくてよい(tag が履歴記録の本体)
 - 原則、main に merge はしない

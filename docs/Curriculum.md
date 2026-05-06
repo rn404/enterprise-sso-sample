@@ -1,4 +1,3 @@
-
 # Track A: Enterprise SSO / Identity Federation
 
 A1. Single-tenant SAML SSO

@@ -1,4 +1,4 @@
-# enterprise-sso-sample Design Doc
+# A1. Single-tenant SAML SSO
 
 ## 1. 目的
 
