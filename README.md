@@ -2,6 +2,9 @@
 
 Enterprise 向けアプリケーションに求められる SSO 認証を学ぶため、AI支援をうけながらサンプルアプリケーションを作成する
 
+> [!NOTE]
+> このリポジトリは learning 用途の段階的サンプル。各 track item で示す実装・運用例は学習要件に合わせた最小構成であり、production 運用ソリューションではない。
+
 ## Environment
 
 * Claude code (AI Coding agent)
@@ -22,18 +25,16 @@ Enterprise 向けアプリケーションに求められる SSO 認証を学ぶ�
 
 ## Notes
 
-アプリケーション実行で参照したい環境変数は `.env` ファイルではなく、各自セキュアな方法で利用する (AI 支援前提のため、機密値はリポジトリ・コンテキストに置かない)
+このアプリが参照する環境変数:
 
-Example:
-(結局echoされたらとれるのでこれはあまりよくない例)
-```bash
-export APP_URL=http://localhost:3000
-export BOOTSTRAP_MODE=true
-export SUPER_USER_EMAIL=operator@example.com
-export SESSION_SECRET=<long-random-string>
+| 変数 | 用途 | 例 |
+|---|---|---|
+| `APP_URL` | SP の base URL | `http://localhost:3000` |
+| `BOOTSTRAP_MODE` | 初期設定モード ON/OFF | `true` / `false` |
+| `SUPER_USER_EMAIL` | 初期ログイン許可 email | (個別設定) |
+| `SESSION_SECRET` | session cookie 署名鍵 | (ランダム長文字列) |
 
-npm run dev
-```
+`SESSION_SECRET` のような機密値は **Claude を動かしているシェルとは別のターミナル** で扱うこと。同じシェルで `export` すると Claude プロセスが env を継承し、「機密値はリポジトリ・コンテキストに置かない」方針に反する。具体的な投入方法は各自のセキュリティ要件に応じて選ぶ (別シェル運用、secrets manager 経由など)。
 
 ## For Contributors
 
