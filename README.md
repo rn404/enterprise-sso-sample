@@ -7,8 +7,8 @@ Enterprise 向けアプリケーションに求められる SSO 認証を学ぶ�
 
 ## Environment
 
-* Claude code (AI Coding agent)
-* その他は `scripts/initialize.sh` を参照
+- Claude code (AI Coding agent)
+- その他は `scripts/initialize.sh` を参照
 
 ## Workflow
 
@@ -27,20 +27,20 @@ Enterprise 向けアプリケーションに求められる SSO 認証を学ぶ�
 
 このアプリが参照する環境変数:
 
-| 変数 | 用途 | 例 |
-|---|---|---|
-| `APP_URL` | SP の base URL | `http://localhost:3000` |
-| `BOOTSTRAP_MODE` | 初期設定モード ON/OFF | `true` / `false` |
-| `SUPER_USER_EMAIL` | 初期ログイン許可 email | (個別設定) |
-| `SESSION_SECRET` | session cookie 署名鍵 | (ランダム長文字列) |
+| 変数               | 用途                   | 例                      |
+| ------------------ | ---------------------- | ----------------------- |
+| `APP_URL`          | SP の base URL         | `http://localhost:3000` |
+| `BOOTSTRAP_MODE`   | 初期設定モード ON/OFF  | `true` / `false`        |
+| `SUPER_USER_EMAIL` | 初期ログイン許可 email | (個別設定)              |
+| `SESSION_SECRET`   | session cookie 署名鍵  | (ランダム長文字列)      |
 
 `SESSION_SECRET` のような機密値は **Claude を動かしているシェルとは別のターミナル** で扱うこと。同じシェルで `export` すると Claude プロセスが env を継承し、「機密値はリポジトリ・コンテキストに置かない」方針に反する。具体的な投入方法は各自のセキュリティ要件に応じて選ぶ (別シェル運用、secrets manager 経由など)。
 
 ## For Contributors
 
-* `main`: 学習素材の最新状態を保つ branch。**各 track item の解答実装は main に入れない**
-* `<item-id>-<topic>/start`: 各 track item の学習開始地点を表す **不変な tag**
-* `<item-id>-<topic>/sample`: 各 track item の解答例を表す **不変な tag**（残すかは item ごとに判断）
+- `main`: 学習素材の最新状態を保つ branch。**各 track item の解答実装は main に入れない**
+- `<item-id>-<topic>/start`: 各 track item の学習開始地点を表す **不変な tag**
+- `<item-id>-<topic>/sample`: 各 track item の解答例を表す **不変な tag**（残すかは item ごとに判断）
 
 ### Naming rule for tags
 
@@ -83,6 +83,6 @@ git checkout -b dev/<item-id>-<topic> <item-id>-<topic>/start
 git tag -a <item-id>-<topic>/sample -m "Reference solution — <Item-ID> <Topic>"
 git push origin <item-id>-<topic>/sample
 ```
+
 - 作業ブランチ自体は push しなくてよい(tag が履歴記録の本体)
 - 原則、main に merge はしない
-

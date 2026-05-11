@@ -44,6 +44,7 @@ discarded paths are often the most reusable knowledge.}
 disruptive.}
 
 ### 5.1 {Option A}
+
 ### 5.2 {Option B}
 
 ## 6. {Migration thresholds}

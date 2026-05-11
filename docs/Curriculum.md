@@ -1,4 +1,3 @@
-
 # Track A: Enterprise SSO / Identity Federation
 
 - A1. Single-tenant SAML SSO
@@ -7,7 +6,6 @@
 - A4. JIT provisioning and account linking
 - A5. SCIM provisioning
 - A6. Enterprise SSO migration
-
 
 # Track B: Application AuthN/AuthZ Fundamentals
 
@@ -18,7 +16,6 @@
 - B5. User / role / permission model
 - B6. RBAC for admin applications
 - B7. Audit log and authorization checks
-
 
 # Track C: OAuth / API Authorization
 
@@ -38,7 +35,6 @@
 - C4 → C6 → C7
 - A4 → A5
 - A2/A3/A4/A5 → A6
-
 
 # Syllabus examples (draft)
 
